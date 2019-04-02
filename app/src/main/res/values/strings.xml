@@ -1,0 +1,26 @@
+<resources>
+    <!--
+    <string name="app_name">Nearsighted Foolish Cat</string>
+    -->
+    <string name="app_name">NFCat</string>
+
+    <string name="menu_copy_path">保存先パスをコピー</string>
+    <string name="menu_show_save_file">保存ファイル名を表示</string>
+    <string name="menu_load_file">読込</string>
+    <string name="menu_save_file">保存</string>
+
+    <string name="hint_recv">受信データ表示部分</string>
+    <string name="hint_send">送信データ入力部分</string>
+
+    <string name="button1">ボタン1</string>
+    <string name="button2">ボタン2</string>
+    <string name="button3">ボタン3</string>
+
+    <string name="spinner_recv">recv</string>
+    <string name="spinner_send">send</string>
+
+    <string name="error_string">error</string>
+    <string-array name="error_spinner">
+        <item>error</item>
+    </string-array>
+</resources>

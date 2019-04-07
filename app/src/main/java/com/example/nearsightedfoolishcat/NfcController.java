@@ -1,86 +1,19 @@
 package com.example.nearsightedfoolishcat;
 
-import android.app.Activity;
-import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.nfc.tech.MifareClassic;
-import android.nfc.tech.MifareUltralight;
 import android.nfc.tech.Ndef;
-import android.nfc.tech.NdefFormatable;
 import android.nfc.tech.NfcA;
-import android.nfc.tech.NfcB;
 import android.nfc.tech.NfcF;
-import android.nfc.tech.NfcV;
 import android.support.annotation.NonNull;
-
-import java.util.Objects;
 
 class NfcController {
 
     /**
-     * NFC用のインテント通知の設定を生成する
-     * @param activity インテントを受け取るアクティビティ
-     * @return インテント通知の設定
-     */
-    static PendingIntent createPendingIntent(Activity activity) {
-        return PendingIntent.getActivity(activity, 0,
-                new Intent(activity, activity.getClass())
-                        .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
-    }
-
-    /**
-     * NFC用のインテントを受け取るためのフィルタを生成する
-     * @return インテントのフィルタ
-     */
-    static IntentFilter[] createIntentFilters() {
-        IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-        IntentFilter techDetected = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
-        IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
-
-        return new IntentFilter[] {ndefDetected, techDetected, tagDetected};
-    }
-
-    /**
-     * NFC用のインテントを受け取るためのフィルタの詳細
-     * @return フィルタの詳細
-     */
-    static String[][] createTechList() {
-        return new String[][] {
-                {NfcA.class.getName()},
-                {NfcB.class.getName()},
-                {NfcF.class.getName()},
-                {NfcV.class.getName()},
-                {Ndef.class.getName()},
-                {NdefFormatable.class.getName()},
-                {MifareClassic.class.getName()},
-                {MifareUltralight.class.getName()}
-        };
-    }
-
-    /**
-     * NFCのインテントの場合、真を返す
-     * @param intent 確認するインテント
-     * @return 真偽値
-     */
-    static boolean isNfcIntent(Intent intent) {
-        final String action = Objects.requireNonNull(intent.getAction());
-        switch (action) {
-            case NfcAdapter.ACTION_NDEF_DISCOVERED:
-            case NfcAdapter.ACTION_TECH_DISCOVERED:
-            case NfcAdapter.ACTION_TAG_DISCOVERED:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    /**
      * NFCの情報を文字列で返す
      * (動作確認用)
-     * @param intent 受信インテント
+     * @param intent 受信したNFCのインテント
      * @return タグ情報
      */
     static @NonNull String getNfcInfo(Intent intent) {

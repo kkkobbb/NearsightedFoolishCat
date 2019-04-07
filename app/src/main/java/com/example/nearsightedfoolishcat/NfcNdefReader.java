@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * NDEF形式の読み込み
+ */
 class NfcNdefReader {
 
     /**

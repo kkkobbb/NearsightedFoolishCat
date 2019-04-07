@@ -78,18 +78,15 @@ public class ConsoleFragment extends Fragment {
         // 表示用のviewの生成
         view = inflater.inflate(R.layout.console, container, false);
 
-        // activityにインテントを受け取った際のイベントリスナーを登録する
+        // activityにNFC用のインテントを受け取った際のイベントリスナーを登録する
         final Activity activity = Objects.requireNonNull(getActivity());
-        Intent intent = activity.getIntent();
-        onNewIntent(intent);
-
         if (activity instanceof MainActivity) {
             final MainActivity mainActivity = (MainActivity) activity;
             final ConsoleFragment self = this;
-            mainActivity.addOnNewIntentListener(new MainActivity.OnNewIntentListener() {
+            mainActivity.addOnNewNfcIntentListener(new MainActivity.OnNewNfcIntentListener() {
                 @Override
-                public void onNewIntent(Intent intent) {
-                    self.onNewIntent(intent);
+                public void onNewNfcIntent(Intent intent) {
+                    self.onNewNfcIntent(intent);
                 }
             });
         }
@@ -98,31 +95,28 @@ public class ConsoleFragment extends Fragment {
     }
 
     /**
-     * インテント受け取り処理
+     * NFC用のインテント受け取り処理
      * (MainActivityのイベントに登録する用)
-     * @param intent 受け取ったインテント
+     * @param intent 受け取ったNFC用インテント
      */
-    void onNewIntent(Intent intent) {
+    void onNewNfcIntent(Intent intent) {
         final String action = Objects.requireNonNull(intent.getAction());
 
-        // NFCのインテントの場合、タグを操作する
-        if (NfcController.isNfcIntent(intent)) {
-            if (state == State.RECV) {
-                // 受信処理
-                final String NfcInfo = action + "\n\n" + NfcController.getNfcInfo(intent);
-                final TextView textViewRecv = view.findViewById(R.id.textViewRecv);
-                textViewRecv.setText(NfcInfo);
-            }
+        if (state == State.RECV) {
+            // 受信処理
+            final String NfcInfo = action + "\n\n" + NfcController.getNfcInfo(intent);
+            final TextView textViewRecv = view.findViewById(R.id.textViewRecv);
+            textViewRecv.setText(NfcInfo);
+        }
 
-            if (state == State.SEND) {
-                // 送信処理
-                final EditText editTextSend = view.findViewById(R.id.editTextSend);
-                SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
-                String text = sb.toString();
-                boolean sent = NfcNdefWriter.sendText(intent, text);
-                if (!sent) {
-                    show("送信に失敗しました");
-                }
+        if (state == State.SEND) {
+            // 送信処理
+            final EditText editTextSend = view.findViewById(R.id.editTextSend);
+            SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
+            String text = sb.toString();
+            boolean sent = NfcNdefWriter.sendText(intent, text);
+            if (!sent) {
+                show("送信に失敗しました");
             }
         }
     }

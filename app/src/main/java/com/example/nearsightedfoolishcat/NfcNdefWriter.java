@@ -10,6 +10,9 @@ import android.nfc.tech.Ndef;
 
 import java.io.IOException;
 
+/**
+ * NDEF形式の書き込み
+ */
 class NfcNdefWriter {
 
     /**

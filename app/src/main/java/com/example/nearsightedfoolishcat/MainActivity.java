@@ -1,11 +1,6 @@
 package com.example.nearsightedfoolishcat;
 
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.nfc.NfcAdapter;
-import android.nfc.NfcManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
@@ -16,37 +11,27 @@ import java.util.LinkedList;
  * タグを検出すると自動で起動する
  */
 public class MainActivity extends AppCompatActivity {
-    final LinkedList<OnNewIntentListener> onNewIntentListeners = new LinkedList<>();
+    final LinkedList<OnNewNfcIntentListener> onNewNfcIntentListeners = new LinkedList<>();
 
-    private NfcAdapter adapter;
-    private PendingIntent pendingIntent;
-    private IntentFilter[] intentFilters;
-    private String[][] techLists;
+    private NfcIntentManager nfcIntentManager = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // アダプタ取得
-        adapter =  ((NfcManager)getSystemService(Context.NFC_SERVICE)).getDefaultAdapter();
-
-        // NFC用インテント通知の設定
-        pendingIntent = NfcController.createPendingIntent(this);
-        // NFC用インテントフィルタ
-        intentFilters = NfcController.createIntentFilters();
-        // NFC用 tech list
-        techLists = NfcController.createTechList();
+        if (nfcIntentManager == null) {
+            nfcIntentManager = new NfcIntentManager(this);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (adapter != null) {
-            // Resume以後でないと例外が発生する
+        if (nfcIntentManager != null) {
             // 起動時のみインテントを受け取る
-            adapter.enableForegroundDispatch(this, pendingIntent, intentFilters, techLists);
+            nfcIntentManager.enable();
         }
     }
 
@@ -54,30 +39,34 @@ public class MainActivity extends AppCompatActivity {
     public void onPause() {
         super.onPause();
 
-        // 終了時のみ
-        if (isFinishing() && adapter != null) {
-            adapter.disableForegroundDispatch(this);
+        // 終了時のみの処理
+        if (isFinishing() && nfcIntentManager != null) {
+            nfcIntentManager.disable();
         }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
+
+        // NFC用のインテントの場合のみ、登録されたリスナーを実行する
+        if (!NfcIntentManager.isNfcIntent(intent))
+            return;
+
         // TODO listenerの登録元のFragmentが破棄された場合、どうなる？
-        // 登録されたリスナーを実行する
-        for (OnNewIntentListener listener : onNewIntentListeners) {
-            listener.onNewIntent(intent);
+        for (OnNewNfcIntentListener listener : onNewNfcIntentListeners) {
+            listener.onNewNfcIntent(intent);
         }
     }
 
     /**
-     * インテントを受け取った際のイベントを登録する
+     * NFC用のインテントを受け取った際のイベントを登録する
      * @param listener イベントリスナー
      */
-    void addOnNewIntentListener(OnNewIntentListener listener) {
-        onNewIntentListeners.add(listener);
+    void addOnNewNfcIntentListener(OnNewNfcIntentListener listener) {
+        onNewNfcIntentListeners.add(listener);
     }
 
-    interface OnNewIntentListener extends EventListener {
-        void onNewIntent(Intent intent);
+    interface OnNewNfcIntentListener extends EventListener {
+        void onNewNfcIntent(Intent intent);
     }
 }

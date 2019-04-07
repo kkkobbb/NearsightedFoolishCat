@@ -4,10 +4,7 @@
     -->
     <string name="app_name">NFCat</string>
 
-    <string name="menu_copy_path">保存先パスをコピー</string>
-    <string name="menu_show_save_file">保存ファイル名を表示</string>
-    <string name="menu_load_file">読込</string>
-    <string name="menu_save_file">保存</string>
+    <string name="menu_none">メニュー無し</string>
 
     <string name="hint_recv">受信データ表示部分</string>
     <string name="hint_send">送信データ入力部分</string>

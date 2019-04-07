@@ -8,6 +8,11 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.NfcF;
 import android.support.annotation.NonNull;
 
+/**
+ * NFCの内容を表示する。
+ * NFC A と NFC F に対応している。
+ * NDEF形式の場合、さらに詳細を表示する
+ */
 class NfcController {
 
     /**

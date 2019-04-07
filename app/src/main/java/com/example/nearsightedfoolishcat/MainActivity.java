@@ -8,7 +8,7 @@ import java.util.EventListener;
 import java.util.LinkedList;
 
 /**
- * タグを検出すると自動で起動する
+ * 起動時にNFCインテントを受け取るように設定する
  */
 public class MainActivity extends AppCompatActivity {
     final LinkedList<OnNewNfcIntentListener> onNewNfcIntentListeners = new LinkedList<>();
@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // インテント受け取り用の初期化
         if (nfcIntentManager == null) {
             nfcIntentManager = new NfcIntentManager(this);
         }
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         if (nfcIntentManager != null) {
-            // 起動時のみインテントを受け取る
+            // インテントを受け取れるようにする
             nfcIntentManager.enable();
         }
     }

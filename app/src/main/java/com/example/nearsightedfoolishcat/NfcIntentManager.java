@@ -30,8 +30,13 @@ class NfcIntentManager {
     final private IntentFilter[] intentFilters;
     final private String[][] techLists;
 
-    NfcIntentManager(Activity activity)
-    {
+    /**
+     * コンストラクタ
+     * インテント受け取りの設定用のデータを生成する
+     *
+     * @param activity インテントを受け取るアクティビティ
+     */
+    NfcIntentManager(Activity activity) {
         this.activity = activity;
 
         adapter = ((NfcManager)this.activity.getSystemService(Context.NFC_SERVICE)).getDefaultAdapter();
@@ -44,8 +49,7 @@ class NfcIntentManager {
      * インテントを受け取れるようにする
      * (Resume以降でないと例外が発生する)
      */
-    void enable()
-    {
+    void enable() {
         if (adapter == null) {
             return;
         }
@@ -55,8 +59,7 @@ class NfcIntentManager {
     /**
      * インテントの受け取りを無効にする
      */
-    void disable()
-    {
+    void disable() {
         if (adapter == null) {
             return;
         }

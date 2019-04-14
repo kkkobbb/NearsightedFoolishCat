@@ -22,10 +22,10 @@ class NfcNdefWriter {
      * @param text 書き込む文字列
      * @return 成否
      */
-    static boolean sendText(Intent intent, String text) {
+    static boolean sendText(final Intent intent, final String text) {
         // Ndefメッセージの書き込み
-        Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        Ndef ndef = Ndef.get(tag);
+        final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        final Ndef ndef = Ndef.get(tag);
         if (ndef == null) {
             return false;
         }
@@ -36,8 +36,8 @@ class NfcNdefWriter {
                 NdefRecord.TNF_WELL_KNOWN, NdefRecord.RTD_TEXT,
                 null, text.getBytes());
         */
-        NdefRecord record = NdefRecord.createTextRecord(null, text);
-        NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
+        final NdefRecord record = NdefRecord.createTextRecord(null, text);
+        final NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
 
         boolean sent = false;
         try {

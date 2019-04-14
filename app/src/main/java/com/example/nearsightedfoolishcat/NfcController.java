@@ -21,7 +21,7 @@ class NfcController {
      * @param intent 受信したNFCのインテント
      * @return タグ情報
      */
-    static @NonNull String getNfcInfo(Intent intent) {
+    static @NonNull String getNfcInfo(final Intent intent) {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
         final StringBuilder info = new StringBuilder();
@@ -49,11 +49,9 @@ class NfcController {
         for (String tech : techList) {
             if (tech.equals(NfcA.class.getName())) {
                 hasNfcA = true;
-            }
-            if (tech.equals(Ndef.class.getName())) {
+            } else if (tech.equals(Ndef.class.getName())) {
                 hasNdef = true;
-            }
-            if (tech.equals(NfcF.class.getName())) {
+            } else if (tech.equals(NfcF.class.getName())) {
                 hasNfcF = true;
             }
             info.append("\n  ").append(tech);
@@ -86,7 +84,7 @@ class NfcController {
      * @param tag NFC typeA のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNfcA(Tag tag) {
+    private static @NonNull String getNfcInfoNfcA(final Tag tag) {
         // NFC A形式への変換
         final NfcA nfcA = NfcA.get(tag);
         if (nfcA == null) {
@@ -122,7 +120,7 @@ class NfcController {
      * @param tag NDEF形式のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNdef(Tag tag) {
+    private static @NonNull String getNfcInfoNdef(final Tag tag) {
         // NDEF形式へ変換
         final Ndef ndef = Ndef.get(tag);
         if (ndef == null) {
@@ -156,7 +154,7 @@ class NfcController {
      * @param tag NFC typeF のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNfcF(Tag tag) {
+    private static @NonNull String getNfcInfoNfcF(final Tag tag) {
         // NfcF 形式への変換
         final NfcF nfcF = NfcF.get(tag);
         if (nfcF == null) {

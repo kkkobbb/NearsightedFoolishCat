@@ -21,7 +21,7 @@ class NfcNdefReader {
      * @param intent NDEF形式のタグ読み込み時のインテント
      * @return Message情報
      */
-    static String getMessageInfo(Intent intent) {
+    static String getMessageInfo(final Intent intent) {
         final Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         if (parcelables == null) {
             return "no message";
@@ -114,7 +114,7 @@ class NfcNdefReader {
      * @param tnf TNFの値
      * @return TNFを表す文字列
      */
-    static private @NonNull String getTnfName(short tnf) {
+    static private @NonNull String getTnfName(final short tnf) {
         final String name;
         switch (tnf) {
             case NdefRecord.TNF_EMPTY:

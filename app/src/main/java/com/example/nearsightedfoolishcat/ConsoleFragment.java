@@ -48,7 +48,7 @@ public class ConsoleFragment extends Fragment {
             final ConsoleFragment self = this;
             mainActivity.addOnNewNfcIntentListener(new MainActivity.OnNewNfcIntentListener() {
                 @Override
-                public void onNewNfcIntent(Intent intent) {
+                public void onNewNfcIntent(final Intent intent) {
                     self.onNewNfcIntent(intent);
                 }
             });
@@ -62,7 +62,7 @@ public class ConsoleFragment extends Fragment {
      * (MainActivityのイベントに登録する用)
      * @param intent 受け取ったNFC用インテント
      */
-    void onNewNfcIntent(Intent intent) {
+    void onNewNfcIntent(final Intent intent) {
         final String action = Objects.requireNonNull(intent.getAction());
 
         if (state == State.RECV) {
@@ -148,7 +148,7 @@ public class ConsoleFragment extends Fragment {
      * 簡易版メッセージ表示 （とりあえずtoast）
      * @param msg 表示するメッセージ
      */
-    private void show(String msg) {
+    private void show(final String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 

@@ -63,11 +63,11 @@ public class MainActivity extends AppCompatActivity {
      * NFC用のインテントを受け取った際のイベントを登録する
      * @param listener イベントリスナー
      */
-    void addOnNewNfcIntentListener(OnNewNfcIntentListener listener) {
+    void addOnNewNfcIntentListener(final OnNewNfcIntentListener listener) {
         onNewNfcIntentListeners.add(listener);
     }
 
     interface OnNewNfcIntentListener extends EventListener {
-        void onNewNfcIntent(Intent intent);
+        void onNewNfcIntent(final Intent intent);
     }
 }

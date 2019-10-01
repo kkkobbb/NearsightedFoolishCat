@@ -23,13 +23,6 @@ class NfcNdefWriter {
      * @return 成否
      */
     static boolean sendText(final Intent intent, final String text) {
-        // Ndefメッセージの書き込み
-        final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        final Ndef ndef = Ndef.get(tag);
-        if (ndef == null) {
-            return false;
-        }
-
         // Ndefメッセージの生成
         /*
         NdefRecord record = new NdefRecord(
@@ -39,15 +32,14 @@ class NfcNdefWriter {
         final NdefRecord record = NdefRecord.createTextRecord(null, text);
         final NdefMessage msg = new NdefMessage(new NdefRecord[] {record});
 
+        // Ndefメッセージの書き込み
+        final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         boolean sent = false;
-        try {
+        try (final Ndef ndef = Ndef.get(tag)) {
             ndef.connect();
             ndef.writeNdefMessage(msg);
-            ndef.close();
             sent = true;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FormatException e) {
+        } catch (IOException | FormatException e) {
             e.printStackTrace();
         }
 

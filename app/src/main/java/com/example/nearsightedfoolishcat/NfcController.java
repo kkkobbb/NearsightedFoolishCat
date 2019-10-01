@@ -131,7 +131,7 @@ class NfcController {
 
         // NDEFメッセージサイズ取得
         final int maxSize = ndef.getMaxSize();
-        info.append("\nMaxSize: ").append(Integer.toString(maxSize));
+        info.append("\nMaxSize: ").append(maxSize);
 
         // タグtype取得
         final String tagType = ndef.getType();

@@ -21,7 +21,8 @@ public class SimpleNfc {
      * @param intent 受信したNFCのインテント
      * @return タグ情報
      */
-    public static @NonNull String getNfcInfo(final Intent intent) {
+    @NonNull
+    public static String getNfcInfo(final Intent intent) {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
         final StringBuilder info = new StringBuilder();
@@ -84,7 +85,8 @@ public class SimpleNfc {
      * @param tag NFC typeA のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNfcA(final Tag tag) {
+    @NonNull
+    private static String getNfcInfoNfcA(final Tag tag) {
         // NFC A形式への変換
         final NfcA nfcA = NfcA.get(tag);
         if (nfcA == null) {
@@ -120,7 +122,8 @@ public class SimpleNfc {
      * @param tag NDEF形式のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNdef(final Tag tag) {
+    @NonNull
+    private static String getNfcInfoNdef(final Tag tag) {
         // NDEF形式へ変換
         final Ndef ndef = Ndef.get(tag);
         if (ndef == null) {
@@ -154,7 +157,8 @@ public class SimpleNfc {
      * @param tag NFC typeF のタグ
      * @return タグ情報
      */
-    private static @NonNull String getNfcInfoNfcF(final Tag tag) {
+    @NonNull
+    private static String getNfcInfoNfcF(final Tag tag) {
         // NfcF 形式への変換
         final NfcF nfcF = NfcF.get(tag);
         if (nfcF == null) {

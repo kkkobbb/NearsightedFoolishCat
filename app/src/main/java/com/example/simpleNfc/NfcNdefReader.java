@@ -21,6 +21,7 @@ class NfcNdefReader {
      * @param intent NDEF形式のタグ読み込み時のインテント
      * @return Message情報
      */
+    @NonNull
     static String getMessageInfo(final Intent intent) {
         final Parcelable[] parcelables = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
         if (parcelables == null) {
@@ -83,7 +84,8 @@ class NfcNdefReader {
      * @param payload 生データ
      * @return 言語コード
      */
-    private static @NonNull String getLanguageCodeAtPayload(final byte[] payload) {
+    @NonNull
+    private static String getLanguageCodeAtPayload(final byte[] payload) {
         final int languageCodeLength = payload[0] & 0x3F;
         return new String(payload, 1, languageCodeLength, StandardCharsets.US_ASCII);
     }
@@ -93,7 +95,8 @@ class NfcNdefReader {
      * @param payload 生データ
      * @return 本文
      */
-    private static @NonNull String getTextAtPayload(final byte[] payload) {
+    @NonNull
+    private static String getTextAtPayload(final byte[] payload) {
         // payloadの先頭数byteに文字コードと言語を表す値が格納されている
 
         // 文字コード識別
@@ -111,7 +114,8 @@ class NfcNdefReader {
         return new String(payload, 1 + languageCodeLength, textLength, charset);
     }
 
-    private static @NonNull String getHexString(final byte[] payload) {
+    @NonNull
+    private static String getHexString(final byte[] payload) {
         StringBuilder payloadHex = new StringBuilder();
         for (int j = 0; j < payload.length; j++) {
             if (j % 16 == 0) {
@@ -129,7 +133,8 @@ class NfcNdefReader {
      * @param tnf TNFの値
      * @return TNFを表す文字列
      */
-    private static @NonNull String getTnfName(final short tnf) {
+    @NonNull
+    private static String getTnfName(final short tnf) {
         final String name;
         switch (tnf) {
             case NdefRecord.TNF_EMPTY:

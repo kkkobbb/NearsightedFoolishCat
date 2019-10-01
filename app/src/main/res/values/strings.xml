@@ -15,6 +15,7 @@
 
     <string name="spinner_recv">recv</string>
     <string name="spinner_send">send</string>
+    <string name="spinner_send_aar">send AAR</string>
 
     <string name="error_string">error</string>
     <string-array name="error_spinner">

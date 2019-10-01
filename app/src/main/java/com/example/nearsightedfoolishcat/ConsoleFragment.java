@@ -75,9 +75,20 @@ public class ConsoleFragment extends Fragment {
         if (state == State.SEND) {
             // 送信処理
             final EditText editTextSend = view.findViewById(R.id.editTextSend);
-            SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
-            String text = sb.toString();
-            boolean sent = NfcNdefWriter.sendText(intent, text);
+            final SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
+            final String text = sb.toString();
+            final boolean sent = NfcNdefWriter.sendText(intent, text);
+            if (!sent) {
+                show("送信に失敗しました");
+            }
+        }
+
+        if (state == State.SEND_AAR) {
+            // AAR情報送信処理
+            final EditText editTextSend = view.findViewById(R.id.editTextSend);
+            final SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
+            final String pkgName = sb.toString();
+            final boolean sent = NfcNdefWriter.sendAAR(intent, pkgName);
             if (!sent) {
                 show("送信に失敗しました");
             }
@@ -90,8 +101,9 @@ public class ConsoleFragment extends Fragment {
 
         // 状態変更用のスピナー
         final List<String> spinnerNumberList = new ArrayList<>();
-        spinnerNumberList.add(getResources().getString(State.RECV.getId()));
-        spinnerNumberList.add(getResources().getString(State.SEND.getId()));
+        for (State st : State.values()) {
+            spinnerNumberList.add(getResources().getString(st.getId()));
+        }
         final Spinner spinnerNumber = view.findViewById(R.id.spinnerNumber);
         final ArrayAdapter<String> adapterSpinnerNumber = new ArrayAdapter<>(
                 spinnerNumber.getContext(), R.layout.spinner_item, spinnerNumberList);
@@ -102,14 +114,11 @@ public class ConsoleFragment extends Fragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // 状態を変更する
-                switch (position) {
-                    case 0:
-                        state = State.RECV;
-                        break;
-                    case 1:
-                        state = State.SEND;
-                        break;
+                State[] states = State.values();
+                if (states.length <= position) {
+                    return;
                 }
+                state = states[position];
             }
 
             @Override
@@ -156,7 +165,9 @@ public class ConsoleFragment extends Fragment {
         /** 読み込み */
         RECV(R.string.spinner_recv),
         /** 書き込み */
-        SEND(R.string.spinner_send);
+        SEND(R.string.spinner_send),
+        /** AAR 書き込み */
+        SEND_AAR(R.string.spinner_send_aar);
 
         private final int id;
 

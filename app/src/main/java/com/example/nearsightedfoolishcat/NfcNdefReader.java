@@ -57,19 +57,23 @@ class NfcNdefReader {
                 info.append("    MIME: ").append(mime).append("\n");
 
                 final byte[] payload = record.getPayload();
-                StringBuilder payloadHex = new StringBuilder();
-                for (int j = 0; j < payload.length; j++) {
-                    if (j % 16 == 0) {
-                        payloadHex.append("\n      ");
-                    }
-                    final byte b = payload[j];
-                    payloadHex.append(String.format("%02X ", b));
+
+                if (tnf == NdefRecord.TNF_WELL_KNOWN && type.equals("T")) {
+                    // TNF_WELL_KNOWNの場合の表示 (payloadにヘッダがあるため)
+                    String payloadHex = getHexString(payload);
+                    info.append("    Payload hex: ").append(payloadHex).append("\n");
+                    info.append("    Payload language code: ")
+                            .append(getLanguageCodeAtPayload(payload)).append("\n");
+                    info.append("    Payload text: \n")
+                            .append(getTextAtPayload(payload)).append("\n");
+                    continue;
                 }
+
+                // TNF_WELL_KNOWN以外の場合、payloadを16進数表記とUTF8とみなした文字列を表示
+                String payloadHex = getHexString(payload);
                 info.append("    Payload hex: ").append(payloadHex).append("\n");
-                info.append("    Payload language code: ")
-                        .append(getLanguageCodeAtPayload(payload)).append("\n");
                 info.append("    Payload text: \n")
-                        .append(getTextAtPayload(payload)).append("\n");
+                        .append(new String(payload, StandardCharsets.UTF_8)).append("\n");
             }
         }
 
@@ -81,7 +85,7 @@ class NfcNdefReader {
      * @param payload 生データ
      * @return 言語コード
      */
-    static private @NonNull String getLanguageCodeAtPayload(final byte[] payload) {
+    private static @NonNull String getLanguageCodeAtPayload(final byte[] payload) {
         final int languageCodeLength = payload[0] & 0x3F;
         return new String(payload, 1, languageCodeLength, StandardCharsets.US_ASCII);
     }
@@ -91,7 +95,7 @@ class NfcNdefReader {
      * @param payload 生データ
      * @return 本文
      */
-    static private @NonNull String getTextAtPayload(final byte[] payload) {
+    private static @NonNull String getTextAtPayload(final byte[] payload) {
         // payloadの先頭数byteに文字コードと言語を表す値が格納されている
 
         // 文字コード識別
@@ -104,9 +108,22 @@ class NfcNdefReader {
         }
 
         final int languageCodeLength = payload[0] & 0x3F;
-        // 先頭1バイト＋言語コード長以外が本文となる
+        // 先頭1バイト＋言語コード長以降が本文となる
         final int textLength = payload.length - 1 - languageCodeLength;
         return new String(payload, 1 + languageCodeLength, textLength, charset);
+    }
+
+    private static @NonNull String getHexString(final byte[] payload) {
+        StringBuilder payloadHex = new StringBuilder();
+        for (int j = 0; j < payload.length; j++) {
+            if (j % 16 == 0) {
+                payloadHex.append("\n      ");
+            }
+            final byte b = payload[j];
+            payloadHex.append(String.format("%02X ", b));
+        }
+
+        return payloadHex.toString();
     }
 
     /**
@@ -114,7 +131,7 @@ class NfcNdefReader {
      * @param tnf TNFの値
      * @return TNFを表す文字列
      */
-    static private @NonNull String getTnfName(final short tnf) {
+    private static @NonNull String getTnfName(final short tnf) {
         final String name;
         switch (tnf) {
             case NdefRecord.TNF_EMPTY:

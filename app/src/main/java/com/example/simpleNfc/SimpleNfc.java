@@ -1,4 +1,4 @@
-package com.example.nearsightedfoolishcat;
+package com.example.simpleNfc;
 
 import android.content.Intent;
 import android.nfc.NfcAdapter;
@@ -13,7 +13,7 @@ import android.support.annotation.NonNull;
  * NFC A と NFC F に対応している。
  * NDEF形式の場合、さらに詳細を表示する
  */
-class NfcController {
+public class SimpleNfc {
 
     /**
      * NFCの情報を文字列で返す
@@ -21,7 +21,7 @@ class NfcController {
      * @param intent 受信したNFCのインテント
      * @return タグ情報
      */
-    static @NonNull String getNfcInfo(final Intent intent) {
+    public static @NonNull String getNfcInfo(final Intent intent) {
         final Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
         final StringBuilder info = new StringBuilder();
@@ -183,4 +183,23 @@ class NfcController {
         return info.toString();
     }
 
+    /**
+     * NFCに文字列を書き込む
+     * @param intent 受信したNFCのインテント
+     * @param text 書き込む文字列
+     * @return 成否
+     */
+    public static boolean setNfcText(final Intent intent, final String text) {
+        return NfcNdefWriter.sendText(intent, text);
+    }
+
+    /**
+     * NFCにAARを設定する
+     * @param intent 受信したNFCのインテント
+     * @param pkgName AARとして書き込むパッケージ名
+     * @return 成否
+     */
+    public static boolean setNfcAAR(final Intent intent, final String pkgName) {
+        return NfcNdefWriter.sendAAR(intent, pkgName);
+    }
 }

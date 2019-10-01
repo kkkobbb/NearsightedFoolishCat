@@ -1,4 +1,4 @@
-package com.example.nearsightedfoolishcat;
+package com.example.simpleNfc;
 
 import android.content.Intent;
 import android.nfc.FormatException;

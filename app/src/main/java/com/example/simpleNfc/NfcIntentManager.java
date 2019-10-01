@@ -1,4 +1,4 @@
-package com.example.nearsightedfoolishcat;
+package com.example.simpleNfc;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -23,7 +23,7 @@ import java.util.Objects;
  *
  * アプリ起動時のみ受け取るようにする
  */
-class NfcIntentManager {
+public class NfcIntentManager {
     final private Activity activity;
     final private NfcAdapter adapter;
     final private PendingIntent pendingIntent;
@@ -36,7 +36,7 @@ class NfcIntentManager {
      *
      * @param activity インテントを受け取るアクティビティ
      */
-    NfcIntentManager(Activity activity) {
+    public NfcIntentManager(Activity activity) {
         this.activity = activity;
 
         adapter = ((NfcManager)this.activity.getSystemService(Context.NFC_SERVICE)).getDefaultAdapter();
@@ -49,7 +49,7 @@ class NfcIntentManager {
      * インテントを受け取れるようにする
      * (Resume以降でないと例外が発生する)
      */
-    void enable() {
+    public void enable() {
         if (adapter == null) {
             return;
         }
@@ -59,7 +59,7 @@ class NfcIntentManager {
     /**
      * インテントの受け取りを無効にする
      */
-    void disable() {
+    public void disable() {
         if (adapter == null) {
             return;
         }
@@ -71,7 +71,7 @@ class NfcIntentManager {
      * @param intent 確認するインテント
      * @return 真偽値
      */
-    static boolean isNfcIntent(Intent intent) {
+    public static boolean isNfcIntent(Intent intent) {
         final String action = Objects.requireNonNull(intent.getAction());
         switch (action) {
             case NfcAdapter.ACTION_NDEF_DISCOVERED:

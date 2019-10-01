@@ -1,4 +1,4 @@
-package com.example.nearsightedfoolishcat;
+package com.example.simpleNfc;
 
 import android.content.Intent;
 import android.nfc.NdefMessage;
@@ -57,11 +57,11 @@ class NfcNdefReader {
                 info.append("    MIME: ").append(mime).append("\n");
 
                 final byte[] payload = record.getPayload();
+                String payloadHex = getHexString(payload);
+                info.append("    Payload hex: ").append(payloadHex).append("\n");
 
                 if (tnf == NdefRecord.TNF_WELL_KNOWN && type.equals("T")) {
-                    // TNF_WELL_KNOWNの場合の表示 (payloadにヘッダがあるため)
-                    String payloadHex = getHexString(payload);
-                    info.append("    Payload hex: ").append(payloadHex).append("\n");
+                    // TNF_WELL_KNOWNの場合の表示 (payloadにヘッダがあるため特別な処理が必要)
                     info.append("    Payload language code: ")
                             .append(getLanguageCodeAtPayload(payload)).append("\n");
                     info.append("    Payload text: \n")
@@ -69,9 +69,7 @@ class NfcNdefReader {
                     continue;
                 }
 
-                // TNF_WELL_KNOWN以外の場合、payloadを16進数表記とUTF8とみなした文字列を表示
-                String payloadHex = getHexString(payload);
-                info.append("    Payload hex: ").append(payloadHex).append("\n");
+                // TNF_WELL_KNOWN以外の場合、payload全てをUTF8とみなした文字列として表示
                 info.append("    Payload text: \n")
                         .append(new String(payload, StandardCharsets.UTF_8)).append("\n");
             }

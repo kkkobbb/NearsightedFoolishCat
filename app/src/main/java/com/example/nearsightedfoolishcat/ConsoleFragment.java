@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.simpleNfc.SimpleNfc;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -67,7 +69,7 @@ public class ConsoleFragment extends Fragment {
 
         if (state == State.RECV) {
             // 受信処理
-            final String NfcInfo = action + "\n\n" + NfcController.getNfcInfo(intent);
+            final String NfcInfo = action + "\n\n" + SimpleNfc.getNfcInfo(intent);
             final TextView textViewRecv = view.findViewById(R.id.textViewRecv);
             textViewRecv.setText(NfcInfo);
         }
@@ -77,7 +79,7 @@ public class ConsoleFragment extends Fragment {
             final EditText editTextSend = view.findViewById(R.id.editTextSend);
             final SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
             final String text = sb.toString();
-            final boolean sent = NfcNdefWriter.sendText(intent, text);
+            final boolean sent = SimpleNfc.setNfcText(intent, text);
             if (!sent) {
                 show("送信に失敗しました");
             }
@@ -88,7 +90,7 @@ public class ConsoleFragment extends Fragment {
             final EditText editTextSend = view.findViewById(R.id.editTextSend);
             final SpannableStringBuilder sb = (SpannableStringBuilder) editTextSend.getText();
             final String pkgName = sb.toString();
-            final boolean sent = NfcNdefWriter.sendAAR(intent, pkgName);
+            final boolean sent = SimpleNfc.setNfcAAR(intent, pkgName);
             if (!sent) {
                 show("送信に失敗しました");
             }
@@ -100,17 +102,17 @@ public class ConsoleFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // 状態変更用のスピナー
-        final List<String> spinnerNumberList = new ArrayList<>();
+        final List<String> spinnerItemList = new ArrayList<>();
         for (State st : State.values()) {
-            spinnerNumberList.add(getResources().getString(st.getId()));
+            spinnerItemList.add(getResources().getString(st.getId()));
         }
-        final Spinner spinnerNumber = view.findViewById(R.id.spinnerNumber);
-        final ArrayAdapter<String> adapterSpinnerNumber = new ArrayAdapter<>(
-                spinnerNumber.getContext(), R.layout.spinner_item, spinnerNumberList);
-        adapterSpinnerNumber.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerNumber.setAdapter(adapterSpinnerNumber);
-        spinnerNumber.setSelection(0, false);
-        spinnerNumber.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        final Spinner spinnerOperation = view.findViewById(R.id.spinnerOperation);
+        final ArrayAdapter<String> adapterSpinnerOperation = new ArrayAdapter<>(
+                spinnerOperation.getContext(), R.layout.spinner_item, spinnerItemList);
+        adapterSpinnerOperation.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerOperation.setAdapter(adapterSpinnerOperation);
+        spinnerOperation.setSelection(0, false);
+        spinnerOperation.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // 状態を変更する
